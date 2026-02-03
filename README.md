@@ -11,6 +11,44 @@ Importing and using the template is pretty straight-forward, especially with pre
 Note: The template doesn't support multiple authors.
 If I find the time in the future (and someone requests it), I'll add support for multiple authors.
 
+## Contents
+
+- [Getting Started](#getting-started)
+- [Minimal Configuration](#minimal-configuration)
+- [Configuration Options](#configuration-options)
+- [Tips](#tips)
+    - [Use acronyms in your paper](#use-acronyms-in-your-paper)
+    - [Define custom captions for outlines of figures/tables](#define-custom-captions-for-outlines-of-figurestables)
+
+## Getting Started
+
+The fastest way of just using the template is by initializing a new project with the default template configuration.
+You can do so by typing the following command in a terminal (don't forget to navigate to the folder you want to be in first):
+```typ
+typst init "@preview/aero-dhbw:0.1.0" PROJECT-NAME
+```
+Replace `PROJECT-NAME` with the actual project name or something else if you structure your folders differently.
+
+This default setup comes with an already setup acronym list, where you just have to put in your values and don't have to worry about syntax.
+The most important arguments are already "written out" so-to-say, as well. 
+The intended directory structure is also already present and some usage hints for some lesser components are also included.
+
+## Minimal Configuration
+
+In case you want to do the template setup yourself, here is the minimal configuration needed for the template:
+
+```typ
+#import "@local/aero-dhbw:0.1.0": aero-dhbw
+
+#show: aero-dhbw.with(
+  author: "",
+  start-date: datetime(year: 2026, month: 1, day: 1),
+  end-date: datetime(year: 2026, month: 12, day: 31),
+)
+```
+I would recommend filling in more options, otherwise your cover page won't look very nice.
+
+
 ## Configuration Options
 
 **title**: Title of your project
@@ -95,7 +133,19 @@ As you can see in Overview of Cloud Architecture.
 
 **path-to-annex**: Path to the Typst file containing the annex
 
-**used-ai**: A dictionary with the names of used AI models as keys and the description of how they were used as values. Displays a table in the annex with this information (required by the DHBW guidelines)
+**used-ai**: A dictionary with the names of used AI models as keys and the description of how they were used as values. Displays a table in the annex with this information (required by the DHBW guidelines). Example:
+```typ
+#import "@preview/aero-dhbw:0.1.0": aero-dhbw
+
+#let ai-dict = (
+    "NAME-OF-MODEL" : [DESCRIPTION OF USE]
+)
+
+#show: aero-dhbw.with(
+    // other arguments...
+    used-ai: ai-dict
+)
+```
 
 
 ## Tips

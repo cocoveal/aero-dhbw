@@ -40,7 +40,7 @@ if type(caption) == content {
   university-logo: [],
   company-logo: [],
   confidentiality-notice: [],
-  place-of-authorship: "Stuttgart",
+  place-of-authorship: [],
   path-to-abstract: [],
   acronym-list: (),
   bib: [],
