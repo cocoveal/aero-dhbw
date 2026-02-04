@@ -48,7 +48,7 @@ if type(caption) == content {
   citation-style: "ieee", // use alphanumeric for engineering
   font: "Libertinus Serif",
   text-lang: "de",
-  outline-style: none,
+  outline-style: "default",
   margins: 2.5cm,
   leading-spaces: 1.5em,
   text-size: 12pt,
@@ -150,7 +150,6 @@ if type(caption) == content {
       }
     )
   }
-
 
   // Text styling
   set text(
@@ -281,7 +280,14 @@ if type(caption) == content {
       outline(title: outline-title)
     }
     // Make Chapters bold
-    else {
+    else if outline-style == "default" {
+      show outline.entry.where(level: 1): it => link(
+        it.element.location(),
+        strong(it.indented(it.prefix(), it.body() + h(1fr) + it.page()))
+      )
+      
+      outline(title: outline-title)
+    } else {
       show outline.entry.where(level: 1): it => link(
         it.element.location(),
         strong(it.indented(it.prefix(), it.body() + h(1fr) + it.page()))
