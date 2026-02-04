@@ -16,9 +16,8 @@ If I find the time in the future (and someone requests it), I'll add support for
 - [Getting Started](#getting-started)
 - [Minimal Configuration](#minimal-configuration)
 - [Configuration Options](#configuration-options)
+- [Examples](#examples)
 - [Tips](#tips)
-    - [Use acronyms in your paper](#use-acronyms-in-your-paper)
-    - [Define custom captions for outlines of figures/tables](#define-custom-captions-for-outlines-of-figurestables)
 
 ## Getting Started
 
@@ -51,94 +50,92 @@ I would recommend filling in more options, otherwise your cover page won't look 
 
 ## Configuration Options
 
-**title**: Title of your project
+| Name | Required | Default | Description |
+|------|----------|---------|-------------|
+| **Project Metadata** |  |  |  |
+| title | ✗* | — | Specifies the title of the project. |
+| project | ✗* | — | Specifies the official DHBW project identifier (e.g. T1000). |
+| project-type | ✗* | — | Defines the type of project (e.g. seminar thesis or bachelor thesis). |
+| author | ✓ | — | Specifies the full name of the author. |
+| course | ✗* | — | Defines the name of the study course. |
+| mat-number | ✗* | — | Specifies the DHBW matriculation number (6-digit student ID). |
+| course-acronym | ✗* | — | Defines the abbreviated course name (3–4 letters followed by 2 numbers). |
+| start-date | ✓ | — | Specifies the official start date of the project. |
+| end-date | ✓ | — | Specifies the official end date of the project. |
+| supervisor | ✗ | — | Specifies the company supervisor for the project. |
+| university-supervisor | ✗ | — | Specifies the university professor supervising the project (mainly relevant for bachelor theses). |
+| company | ✗* | — | Defines the name of the employer or partner company. |
+| company-location | ✗* | — | Specifies the city where the company is located. |
+| university | ✗* | — | Defines the name of the university. |
+| **Logos & Other Documents** |  |  |  |
+| university-logo | ✗ | — | Path to the image file of the university logo. |
+| company-logo | ✗ | — | Path to the image file of the company logo. |
+| confidentiality-notice | ✗ | — | Path to an image or PDF containing the confidentiality notice (mainly for company theses). |
+| place-of-authorship | ✗* | — | Specifies the city where the project was completed (used in the declaration of authorship). |
+| **Content Files** |  |  |  |
+| path-to-abstract | ✗ | — | Path to the Typst file containing the abstract. |
+| path-to-annex | ✗ | — | Path to the Typst file containing the annex. |
+| **Acronyms & AI Usage** |  |  |  |
+| acronym-list | ✗ | — | Dictionary defining acronyms used in the document. [See example](#acronym-list)|
+| used-ai | ✗ | — | Dictionary mapping AI model names to descriptions of their usage (required by DHBW guidelines). [See example](#used-ai)|
+| **Bibliography & Citations** |  |  |  |
+| bib | ✗ | — | Path to the bibliography file. |
+| bib-style | ✗ | IEEE | Defines the bibliography style. |
+| citation-style | ✗ | IEEE | Defines the citation style. |
+| **Language & Typography** |  |  |  |
+| font | ✗ | Libertinus Serif | Specifies the font used for the document. |
+| text-lang | ✗ | — | Sets the document language (`en` or `de`). |
+| **Layout & Formatting** |  |  |  |
+| outline-style | ✗ | default | Defines the style used for generated outlines. |
+| margins | ✗ | 2.5 cm | Sets the document margins (DHBW Ravensburg guideline). |
+| leading-spaces | ✗ | 1.5 em | Defines line spacing (DHBW Ravensburg guideline). |
+| text-size | ✗ | 12 pt | Sets the base text size (DHBW Ravensburg guideline). |
+| par-spacing | ✗ | 2 em | Defines spacing between paragraphs. |
+| figure-gap-above | ✗ | 1 em | Sets spacing between a figure and the preceding paragraph. |
+| figure-gap-under | ✗ | 1 em | Sets spacing between a figure and the following paragraph. |
+| table-caption-position | ✗ | bottom | Defines whether table captions appear above or below tables. |
+| **Referencing Behavior** |  |  |  |
+| heading-name-as-supplement | ✗ | false | If enabled, references chapters by their heading name instead of section number. [See example](#heading-name-as-supplement)|
 
-**project**: (DHBW-specific) Official name of the project, e.g. T1000
+**Legend:** ✓ required · ✗ optional · ✗* technically optional but strongly recommended
 
-**project-type**: Type of the project, e.g. seminar thesis or bachelor thesis
+## Examples
 
-**author**: Name of the author / your name
+Below are some examples for configuration options that require some additional information.
 
-**course**: Name of your course, e.g. Electrical Engineering
+### `heading-name-as-supplement`
 
-**mat-number**: Your student ID, at the DHBW, should be a 6-digit number
+Controls how section references are rendered in the text.  
+When enabled, references use the **heading name** instead of the **section number**.
 
-**course-acronym**: Abbreviated form of your course name, should be three to four letters followed by two numbers
+#### Example
 
-**start-date**: Starting date of the project
-
-**end-date**: End date of the project
-
-**supervisor**: Name of your supervisor for the project at your company
-
-**university-supervisor**: Name of your professor that is supervising the project, mostly relevant for the bachelor thesis
-
-**company**: Name of your employer
-
-**company-location**: City of your employer
-
-**university**: Name of your university
-
-**university-logo**: Path to the image of your university's logo
-
-**company-logo**: Path to the image of your company's logo
-
-**confidentiality-notice**: Path to the image/PDF of your confidentiality notice, mostly relevant for theses made at the company
-
-**place-of-authorship**: Name of the city where you completed the project, relevant for the declaration of authorship
-
-**path-to-abstract**: Path to the Typst file containing your abstract
-
-**acronym-list**: Dictionary of acronyms you intend to use. I'd recommend not creating your own, but using `glossary-list` in `acronyms.typ`
-
-**bib**: Path to the `.bib` file containing your citations
-
-**bib-style**: Bibliography syntax style, defaults to IEEE.
-
-**citation-style**: Citation syntax style, defaults to IEEE. Tip: if you are looking for the dialect of IEEE commonly used in Engineering, use `alphanumeric`
-
-**font**: Font for the paper, defaults to Typst's default font `Libertinus Serif`
-
-**text-lang**: Abbreviation of the language used in the paper, relevant for the bibliography, figures, the titlepage and the declaration of authorship. At the moment, only English (`"en"`) and German (`"de"`) are supported.
-
-**outline-style**: Style of the generated outlines. Two styles are supported: The default Typst style (`"typst"`) and the default style.
-
-**margins**: Amount of margin to be applied to the document, defaults to 2.5cm (DHBW Ravensburg guideline)
-
-**leading-spaces**: Amount of space between lines, defaults to 1.5em (DHBW Ravensburg guideline)
-
-**text-size**: Size of text in pt, defaults to 12pt (DHBW Ravensburg guideline)
-
-**par-spacing**: Amount of space between paragraphs, defaults to 2em
-
-**figure-gap-above**: Amount of space between a figure and the paragraph above it, defaults to 1em
-
-**figure-gap-under**: Amount of space between a figure and the paragraph under it, defaults to 1em
-
-**table-caption-position**: Position of the table captions, defaults to bottom. Note: For the bachelor thesis at the DHBW Ravensburg, guidelines demand it to be above the table. In this case, use the option `"top"`.
-
-**heading-name-as-supplement**: Option to use the name of a chapter when referencing it in text.
-Example:
 ```typ
 = Overview of Cloud Architecture <intro>
 
 As you can see in @intro
 
-// If heading-name-as-supplement is set to false this will resolve to:
+// If heading-name-as-supplement is set to false:
 As you can see in Section 2.
 
 // If heading-name-as-supplement is set to true:
 As you can see in Overview of Cloud Architecture.
 ```
 
-**path-to-annex**: Path to the Typst file containing the annex
+---
 
-**used-ai**: A dictionary with the names of used AI models as keys and the description of how they were used as values. Displays a table in the annex with this information (required by the DHBW guidelines). Example:
+### `used-ai`
+
+Defines how artificial intelligence tools were used during the project.  
+This information is rendered as a table in the annex and is required by DHBW guidelines.
+
+#### Example
+
 ```typ
 #import "@preview/aero-dhbw:0.1.0": aero-dhbw
 
 #let ai-dict = (
-    "NAME-OF-MODEL" : [DESCRIPTION OF USE]
+    "NAME-OF-MODEL": [DESCRIPTION OF USE]
 )
 
 #show: aero-dhbw.with(
@@ -146,6 +143,15 @@ As you can see in Overview of Cloud Architecture.
     used-ai: ai-dict
 )
 ```
+
+---
+
+### `acronym-list`
+
+Defines acronyms used throughout the document.  
+It is recommended to use the shared `glossary-list` provided in `acronyms.typ` instead of defining a custom list.
+
+*(No code example required when using the shared glossary.)*
 
 
 ## Tips
