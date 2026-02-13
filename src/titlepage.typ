@@ -19,7 +19,7 @@
 ) = {
 
   let cover(source) = {
-    set image(width: 6cm)
+    set image(height: 2cm, fit: "contain")
     source
   }
 
