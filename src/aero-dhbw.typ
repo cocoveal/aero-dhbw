@@ -85,7 +85,10 @@ if type(caption) == content {
   // packages
   import "@preview/glossy:0.9.0": * // package for acronyms
   import "themes/acronym-theme.typ": theme-pa // theme for glossy
-  
+
+  // Normalize the polymorphic author argument into a list of author dicts.
+  let authors = normalize-authors(author, mat-number, course-acronym)
+
   // Localization
   let outline-title = ""
   let fig-list-title = ""
@@ -138,7 +141,7 @@ if type(caption) == content {
 
   // Document metadata
   set document(
-    author: author,
+    author: authors.map(a => a.name),
     title: title,
   )
 
@@ -217,10 +220,8 @@ if type(caption) == content {
   import "titlepage.typ": *
   titlepage(
     title: title,
-    author: author,
+    authors: authors,
     course: course,
-    mat-number: mat-number,
-    course-acronym: course-acronym,
     start-date: show_date(start-date),
     end-date: show_date(end-date),
     company-location: company-location,
@@ -269,7 +270,7 @@ if type(caption) == content {
   import "declaration.typ": *
   declaration(
     title: title,
-    author: author,
+    authors: authors,
     project: project,
     project-type: project-type,
     date: end-date,
