@@ -1,9 +1,7 @@
 #let titlepage(
   title: [],
-  author: [],
+  authors: (),
   course: [],
-  mat-number: [],
-  course-acronym: [],
   start-date: datetime,
   end-date: datetime,
   company-location: [],
@@ -25,11 +23,10 @@
 
   set text(size: 14pt)
 
-  // Localization: only the strings differ between languages, so they are
-  // assigned here and the layout below is written once (same philosophy as the
-  // main file, aero-dhbw.typ).
+  // Localization: only the strings differ between languages; the layout below
+  // is written once (same philosophy as the main file, aero-dhbw.typ).
   let degree-line = []
-  let author-line = []
+  let by-word = ""
   let supervisor-label = []
   let university-supervisor-label = []
   let period-label = []
@@ -38,7 +35,7 @@
 
   if text-lang == "en" {
     degree-line = [of Degree Course #course \ at #university]
-    author-line = [by \ #author]
+    by-word = "by"
     supervisor-label = [Company Supervisor]
     university-supervisor-label = [University Supervisor]
     period-label = [Completion Period]
@@ -46,7 +43,7 @@
     partner-label = [Cooperation Partner]
   } else {
     degree-line = [Des Studienganges #course \ an der #university]
-    author-line = [von \ #author]
+    by-word = "von"
     supervisor-label = [Betreuer der Ausbildungsfirma]
     university-supervisor-label = [Gutachter der DHBW]
     period-label = [Bearbeitungszeitraum]
@@ -70,13 +67,13 @@
     ]
   )
 
-  v(6em)
+  v(1fr)
 
   set align(center)
 
   par(leading: 1em, text(20pt)[*#title*])
 
-  v(4em)
+  v(1fr)
 
   text(size: 16pt)[#project-type (#project)]
 
@@ -84,14 +81,17 @@
 
   degree-line
 
-  v(4em)
+  v(1fr)
 
-  author-line
+  by-word
+
+  // Original (full-leading) gap after "by"/"von", then names at half leading.
+  par(leading: 0.75em)[#authors.map(a => a.name).join(linebreak())]
 
   v(2em)
   end-date
 
-  v(2em)
+  v(1fr)
 
   set rect(width: 100%, inset: 0.5em)
 
@@ -107,6 +107,13 @@
     parsed.push(university-supervisor)
   }
 
+  // One "Student ID, Course" row per author: label on the first row only.
+  let id-rows = ()
+  for (i, a) in authors.enumerate() {
+    id-rows.push(if i == 0 { id-course-label } else { [] })
+    id-rows.push([#a.mat-number, #a.course-acronym])
+  }
+
   align(left,
     grid(
       columns: (1fr, 1fr),
@@ -114,8 +121,7 @@
       inset: 0.5em,
       period-label,
       [#start-date - #end-date],
-      id-course-label,
-      [#mat-number, #course-acronym],
+      ..id-rows,
       partner-label,
       [#par(justify: true)[#company, #company-location]],
       ..parsed
