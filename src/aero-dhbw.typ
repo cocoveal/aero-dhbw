@@ -22,6 +22,26 @@ if type(caption) == content {
   }
 }
 
+// Normalize the polymorphic `author` argument into a list of author dicts.
+// String -> single author using the top-level mat-number / course-acronym.
+// Array  -> multiple authors; each entry a (name, mat-number, course-acronym)
+//           dict (missing keys default to ""); a bare string entry is name-only.
+#let normalize-authors(author, mat-number, course-acronym) = {
+  if type(author) == array {
+    author.map(a => if type(a) == dictionary {
+      (
+        name: a.at("name", default: ""),
+        mat-number: a.at("mat-number", default: ""),
+        course-acronym: a.at("course-acronym", default: ""),
+      )
+    } else {
+      (name: a, mat-number: "", course-acronym: "")
+    })
+  } else {
+    ((name: author, mat-number: mat-number, course-acronym: course-acronym),)
+  }
+}
+
 #let aero-dhbw(
   title: [],
   project: [],
