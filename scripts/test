@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Smoke test: install the working tree to @local and compile the template
+# against it. This proves your src/ changes actually work end-to-end — the gap
+# that plain `typst compile template/main.typ` misses (it pulls the *published*
+# @preview package, not your local edits).
+#
+# Used by both CI (.github/workflows/ci.yml) and scripts/release.sh.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+. scripts/setup
+
+scripts/package @local >/dev/null
+
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+cp -r template/. "$tmp/"
+grep -rlE '@preview/aero-dhbw:' "$tmp" | while read -r f; do
+  "${SED_INPLACE[@]}" -E "s#@preview/aero-dhbw:[0-9.]+#@local/aero-dhbw:$VERSION#g" "$f"
+done
+
+typst compile --root "$tmp" "$tmp/main.typ" "$tmp/smoke.pdf"
+echo "template compiles against @local/$PKG_PREFIX:$VERSION ✔"

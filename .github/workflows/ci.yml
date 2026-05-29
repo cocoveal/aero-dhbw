@@ -1,0 +1,27 @@
+name: CI
+
+# Compile check only — runs on every push and PR. This NEVER tags, bumps, or
+# publishes anything; releases happen solely via scripts/release.sh + a v* tag
+# (see .github/workflows/release.yml). Its only job is a fast green/red ✓ that
+# your src/ changes still compile.
+on:
+  push:
+    branches: ['**']   # all branches, but NOT tags (tags are the release path)
+  pull_request:
+
+jobs:
+  compile:
+    name: Template compiles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Typst
+        uses: typst-community/setup-typst@v4
+        with:
+          # Pin to a specific version (e.g. "0.14.2") for reproducibility, or
+          # leave as "latest" to get early warning when a new Typst breaks the template.
+          typst-version: latest
+
+      - name: Smoke test (compile template against a @local install of the source)
+        run: scripts/test
