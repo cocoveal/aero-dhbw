@@ -83,7 +83,7 @@ if type(caption) == content {
 ) = {
 
   // packages
-  import "@preview/glossy:0.9.0": * // package for acronyms
+  import "@preview/glossy:0.9.1": * // package for acronyms
   import "themes/acronym-theme.typ": theme-pa // theme for glossy
 
   // Normalize the polymorphic author argument into a list of author dicts.
