@@ -42,10 +42,22 @@
     date-line = [#place-of-authorship, den #datetime.display(date, "[day].[month].[year]")]
   }
 
-  // One shared place/date line, then a stacked signature block per author.
-  let signatures = []
-  for a in authors {
-    signatures = signatures + [
+  // One shared place/date line, then signatures: a single author signs on a
+  // stacked block; multiple authors sign in a two-column grid so they fit on
+  // one page.
+  let signatures = if authors.len() > 1 {
+    v(2em) + grid(
+      columns: (1fr, 1fr),
+      column-gutter: 2em,
+      row-gutter: 2.5em,
+      ..authors.map(a => [
+        #line(length: 80%, stroke: 0.5pt)
+        #v(0.75em)
+        #a.name
+      ]),
+    )
+  } else {
+    authors.map(a => [
 
       #v(4em)
 
@@ -54,8 +66,11 @@
       #v(2em)
 
       #a.name
-    ]
+    ]).join()
   }
+
+  // Tighter gap before the signatures when they form a grid, so up to 6 fit.
+  let date-gap = if authors.len() > 1 { 2.5em } else { 6em }
 
   set text(lang: lang)
   [
@@ -73,7 +88,7 @@
 
     #closing
 
-    #v(6em)
+    #v(date-gap)
 
     #date-line
     #signatures

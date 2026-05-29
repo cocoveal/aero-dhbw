@@ -154,7 +154,7 @@ It is recommended to use the shared `glossary-list` provided in `acronyms.typ` i
 
 ### Multiple authors
 
-For a joint thesis, pass an array of author dictionaries to `author`. Each author carries their own `name`, `mat-number`, and `course-acronym`; the top-level `mat-number` / `course-acronym` are ignored in this case.
+For a joint thesis, pass an array of author dictionaries to `author` (up to 6 authors). Each author carries their own `name`, `mat-number`, and `course-acronym`; the top-level `mat-number` / `course-acronym` are ignored in this case.
 
 #### Example
 
@@ -168,7 +168,7 @@ For a joint thesis, pass an array of author dictionaries to `author`. Each autho
 )
 ```
 
-The title page lists each author (with their own Student ID / Course row) and the Declaration of Authorship switches to plural wording with one signature line per author.
+The title page lists each author (with their own Student ID / Course row) and the Declaration of Authorship switches to plural wording with a signature for each author (laid out in a grid for two or more).
 
 
 ## Tips

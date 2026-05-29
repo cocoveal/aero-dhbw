@@ -88,6 +88,10 @@ if type(caption) == content {
 
   // Normalize the polymorphic author argument into a list of author dicts.
   let authors = normalize-authors(author, mat-number, course-acronym)
+  assert(
+    authors.len() >= 1 and authors.len() <= 6,
+    message: "aero-dhbw supports between 1 and 6 authors (got " + str(authors.len()) + ")",
+  )
 
   // Localization
   let outline-title = ""

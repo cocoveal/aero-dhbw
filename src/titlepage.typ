@@ -67,13 +67,13 @@
     ]
   )
 
-  v(6em)
+  v(1fr)
 
   set align(center)
 
   par(leading: 1em, text(20pt)[*#title*])
 
-  v(4em)
+  v(1fr)
 
   text(size: 16pt)[#project-type (#project)]
 
@@ -81,14 +81,17 @@
 
   degree-line
 
-  v(4em)
+  v(1fr)
 
-  [#by-word \ #authors.map(a => a.name).join(linebreak())]
+  by-word
+
+  // Original (full-leading) gap after "by"/"von", then names at half leading.
+  par(leading: 0.75em)[#authors.map(a => a.name).join(linebreak())]
 
   v(2em)
   end-date
 
-  v(2em)
+  v(1fr)
 
   set rect(width: 100%, inset: 0.5em)
 
