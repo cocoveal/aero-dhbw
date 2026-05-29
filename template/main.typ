@@ -3,6 +3,11 @@
 
 #let title = ""
 #let author = ""
+// For a joint thesis, set author to an array of dicts instead of a string:
+// #let author = (
+//   (name: "", mat-number: "", course-acronym: ""),
+//   (name: "", mat-number: "", course-acronym: ""),
+// )
 #let project = ""
 #let project-type = ""
 #let course = ""

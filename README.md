@@ -8,9 +8,6 @@ There are two thoughts behind the template:
 
 Importing and using the template is pretty straight-forward, especially with previous Typst experience.
 
-Note: The template doesn't support multiple authors.
-If I find the time in the future (and someone requests it), I'll add support for multiple authors.
-
 ## Contents
 
 - [Getting Started](#getting-started)
@@ -56,7 +53,7 @@ I would recommend filling in more options, otherwise your cover page won't look 
 | title | ✗* | — | Specifies the title of the project. |
 | project | ✗* | — | Specifies the official DHBW project identifier (e.g. T1000). |
 | project-type | ✗* | — | Defines the type of project (e.g. seminar thesis or bachelor thesis). |
-| author | ✓ | — | Specifies the full name of the author. |
+| author | ✓ | — | Author's full name (string) for a single author, or an array of `(name, mat-number, course-acronym)` dicts for multiple authors. [See example](#multiple-authors) |
 | course | ✗* | — | Defines the name of the study course. |
 | mat-number | ✗* | — | Specifies the DHBW matriculation number (6-digit student ID). |
 | course-acronym | ✗* | — | Defines the abbreviated course name (3–4 letters followed by 2 numbers). |
@@ -152,6 +149,26 @@ Defines acronyms used throughout the document.
 It is recommended to use the shared `glossary-list` provided in `acronyms.typ` instead of defining a custom list.
 
 *(No code example required when using the shared glossary.)*
+
+---
+
+### Multiple authors
+
+For a joint thesis, pass an array of author dictionaries to `author`. Each author carries their own `name`, `mat-number`, and `course-acronym`; the top-level `mat-number` / `course-acronym` are ignored in this case.
+
+#### Example
+
+```typ
+#show: aero-dhbw.with(
+    // other arguments...
+    author: (
+        (name: "Jane Doe",       mat-number: "123456", course-acronym: "TINF22"),
+        (name: "Max Mustermann", mat-number: "789012", course-acronym: "TINF22"),
+    ),
+)
+```
+
+The title page lists each author (with their own Student ID / Course row) and the Declaration of Authorship switches to plural wording with one signature line per author.
 
 
 ## Tips
