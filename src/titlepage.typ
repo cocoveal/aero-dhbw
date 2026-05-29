@@ -24,155 +24,101 @@
   }
 
   set text(size: 14pt)
-  if text-lang == "en" { 
-    v(-1cm)
 
-    align(top,
-      block(
-        width: 100%,
-        inset: (x: -1cm))[
-          #stack(
-          dir: ltr,
-          if company-logo != [] {
-            align(left, cover(company-logo))
-          },
-          align(right, cover(university-logo)),
-        )
-      ]
-    )
+  // Localization: only the strings differ between languages, so they are
+  // assigned here and the layout below is written once (same philosophy as the
+  // main file, aero-dhbw.typ).
+  let degree-line = []
+  let author-line = []
+  let supervisor-label = []
+  let university-supervisor-label = []
+  let period-label = []
+  let id-course-label = []
+  let partner-label = []
 
-    v(6em)
-
-    set align(center)
-    
-    par(leading: 1em, text(20pt)[*#title*])
-    
-    v(4em)
-
-    text(size: 16pt)[#project-type (#project)]
-
-    v(2em)
-
-    [of Degree Course #course \ at #university]
-
-    v(4em) 
-
-    [by \ #author]
-
-    v(2em)
-    end-date
-
-    v(2em)
-
-    set rect(width: 100%, inset: 0.5em)
-
-    let parsed = ()
-
-    if supervisor != [] {
-      parsed.push([Company Supervisor])
-      parsed.push(supervisor)
-    }
-
-    if university-supervisor != [] {
-      parsed.push([University Supervisor])
-      parsed.push(university-supervisor)
-    }
-
-    align(left,
-      grid(
-        columns: (1fr, 1fr),
-        align: left,
-        inset: 0.5em,
-        [
-          Completion Period
-        ],[
-          #start-date - #end-date 
-        ],[
-           Student ID, Course
-        ],[
-          #mat-number, #course-acronym
-        ],[
-          Cooperation Partner
-        ],[
-          #par(justify: true)[#company, #company-location]
-        ], ..parsed
-      )
-    )
+  if text-lang == "en" {
+    degree-line = [of Degree Course #course \ at #university]
+    author-line = [by \ #author]
+    supervisor-label = [Company Supervisor]
+    university-supervisor-label = [University Supervisor]
+    period-label = [Completion Period]
+    id-course-label = [Student ID, Course]
+    partner-label = [Cooperation Partner]
+  } else {
+    degree-line = [Des Studienganges #course \ an der #university]
+    author-line = [von \ #author]
+    supervisor-label = [Betreuer der Ausbildungsfirma]
+    university-supervisor-label = [Gutachter der DHBW]
+    period-label = [Bearbeitungszeitraum]
+    id-course-label = [Matrikelnummer, Kurs]
+    partner-label = [Dualer Partner]
   }
-  else {
-    v(-1cm)
 
-    align(top,
-      block(
-        width: 100%,
-        inset: (x: -1cm))[
-          #stack(
-          dir: ltr,
-          if company-logo != [] {
-            align(left, cover(company-logo))
-          },
-          align(right, cover(university-logo)),
-        )
-      ]
-    )
+  v(-1cm)
 
-
-    v(6em)
-
-    set align(center)
-    
-    par(leading: 1em, text(20pt)[*#title*])
-    
-    v(4em)
-
-    text(size: 16pt)[#project-type (#project)]
-
-    v(2em)
-
-    [Des Studienganges #course \ an der #university]
-
-    v(4em) 
-
-    [von \ #author]
-
-    v(2em)
-    end-date
-
-    v(2em)
-
-    set rect(width: 100%, inset: 0.5em)
-
-    let parsed = ()
-
-    if supervisor != [] {
-      parsed.push([Betreuer der Ausbildungsfirma])
-      parsed.push(supervisor)
-    }
-
-    if university-supervisor != [] {
-      parsed.push([Gutachter der DHBW])
-      parsed.push(university-supervisor)
-    }
-
-    align(left,
-      grid(
-        columns: (1fr, 1fr),
-        align: left,
-        inset: 0.5em,
-        [
-          Bearbeitungszeitraum
-        ],[
-          #start-date - #end-date 
-        ],[
-          Matrikelnummer, Kurs
-        ],[
-          #mat-number, #course-acronym
-        ],[
-          Dualer Partner
-        ],[
-          #par(justify: true)[#company, #company-location]
-        ], ..parsed
+  align(top,
+    block(
+      width: 100%,
+      inset: (x: -1cm))[
+        #stack(
+        dir: ltr,
+        if company-logo != [] {
+          align(left, cover(company-logo))
+        },
+        align(right, cover(university-logo)),
       )
-    )
+    ]
+  )
+
+  v(6em)
+
+  set align(center)
+
+  par(leading: 1em, text(20pt)[*#title*])
+
+  v(4em)
+
+  text(size: 16pt)[#project-type (#project)]
+
+  v(2em)
+
+  degree-line
+
+  v(4em)
+
+  author-line
+
+  v(2em)
+  end-date
+
+  v(2em)
+
+  set rect(width: 100%, inset: 0.5em)
+
+  let parsed = ()
+
+  if supervisor != [] {
+    parsed.push(supervisor-label)
+    parsed.push(supervisor)
   }
+
+  if university-supervisor != [] {
+    parsed.push(university-supervisor-label)
+    parsed.push(university-supervisor)
+  }
+
+  align(left,
+    grid(
+      columns: (1fr, 1fr),
+      align: left,
+      inset: 0.5em,
+      period-label,
+      [#start-date - #end-date],
+      id-course-label,
+      [#mat-number, #course-acronym],
+      partner-label,
+      [#par(justify: true)[#company, #company-location]],
+      ..parsed
+    )
+  )
 }
