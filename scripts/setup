@@ -1,0 +1,43 @@
+# Source this file (`. scripts/setup`) to load shared release metadata + helpers.
+# Adapted from typst-community/typst-package-template (Apache-2.0).
+#
+# Exports: DATA_DIR, PKG_PREFIX, VERSION, SED_INPLACE, and the functions
+# read-toml / resolve-target.
+
+# Per-platform Typst data directory (this is where @local packages live).
+if [[ "$OSTYPE" == linux* ]]; then
+  DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}"
+elif [[ "$OSTYPE" == darwin* ]]; then
+  DATA_DIR="$HOME/Library/Application Support"
+else
+  DATA_DIR="${APPDATA}"
+fi
+
+# read-toml <file> <key> -> value of a top-level `key = "value"` line (quotes stripped).
+read-toml() {
+  sed -n "s/^$2[[:space:]]*=[[:space:]]*\"\(.*\)\".*/\1/p" "$1" | head -n1
+}
+
+# Portable in-place sed. GNU sed wants `-i`; BSD/macOS sed wants `-i ''`.
+# Use as: "${SED_INPLACE[@]}" -E "s/.../.../g" file
+if sed --version >/dev/null 2>&1; then
+  SED_INPLACE=(sed -i)        # GNU
+else
+  SED_INPLACE=(sed -i '')     # BSD/macOS
+fi
+
+# All callers cd to the repo root before sourcing (and CI runs from the
+# checkout root), so the package root is the current directory.
+ROOT="${ROOT:-$PWD}"
+[[ -f "$ROOT/typst.toml" ]] || { echo "scripts/setup: no typst.toml in $ROOT (run from the repo root)" >&2; return 1 2>/dev/null || exit 1; }
+PKG_PREFIX="$(read-toml "$ROOT/typst.toml" name)"
+VERSION="$(read-toml "$ROOT/typst.toml" version)"
+
+# resolve-target <@local|@preview|DIR> -> filesystem base dir for that namespace.
+resolve-target() {
+  case "$1" in
+    @local)   echo "$DATA_DIR/typst/packages/local" ;;
+    @preview) echo "$DATA_DIR/typst/packages/preview" ;;
+    *)        echo "$1" ;;
+  esac
+}

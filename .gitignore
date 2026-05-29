@@ -1,3 +1,4 @@
 template/resources/*
 !template/resources/dhbw-logo.png
 cur-dev
+out

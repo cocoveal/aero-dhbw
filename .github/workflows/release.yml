@@ -1,0 +1,121 @@
+name: Release to Typst Universe
+
+# Fires when scripts/release.sh's tag is pushed (`git push --follow-tags`).
+# It builds the bundle, creates a GitHub release, and pushes a branch to your
+# fork of typst/packages so you only have to click "Create pull request".
+#
+# One-time setup required:
+#   1. Fork https://github.com/typst/packages  (set REGISTRY_FORK below to match).
+#   2. Create a Personal Access Token that can push to that fork, and add it as
+#      the repo secret  REGISTRY_TOKEN  (Settings -> Secrets and variables -> Actions).
+on:
+  push:
+    tags: ['v*']
+
+env:
+  REGISTRY_FORGE: https://github.com
+  REGISTRY_REPO: typst/packages
+  REGISTRY_FORK: cocoveal/packages   # <-- your fork of typst/packages
+  PATH_PREFIX: packages/preview
+
+jobs:
+  build:
+    name: Build bundle
+    runs-on: ubuntu-latest
+    outputs:
+      pkg-name: ${{ steps.meta.outputs.pkg-name }}
+      pkg-version: ${{ steps.meta.outputs.pkg-version }}
+      pkg-id: ${{ steps.meta.outputs.pkg-id }}
+      git-user-name: ${{ steps.meta.outputs.git-user-name }}
+      git-user-email: ${{ steps.meta.outputs.git-user-email }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Read metadata & verify tag matches manifest
+        id: meta
+        run: |
+          . scripts/setup
+          if [[ "$GITHUB_REF_NAME" != "v$VERSION" ]]; then
+            echo "tag $GITHUB_REF_NAME does not match typst.toml version $VERSION" >&2
+            exit 1
+          fi
+          {
+            echo "pkg-name=$PKG_PREFIX"
+            echo "pkg-version=$VERSION"
+            echo "pkg-id=$PKG_PREFIX-$VERSION"
+            echo "git-user-name=$(git log -1 --pretty=format:'%an')"
+            echo "git-user-email=$(git log -1 --pretty=format:'%ae')"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build bundle
+        run: |
+          . scripts/setup
+          scripts/package out
+          mkdir dist
+          (cd out && zip -r "../dist/${PKG_PREFIX}-${VERSION}.zip" "$PKG_PREFIX")
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.meta.outputs.pkg-id }}
+          path: dist/*
+          retention-days: 3
+
+  release:
+    name: GitHub release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ${{ needs.build.outputs.pkg-id }}
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: ${{ needs.build.outputs.pkg-id }}/*
+
+  publish:
+    name: Stage Universe PR (push branch to fork)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the registry fork
+        uses: actions/checkout@v6
+        with:
+          github-server-url: ${{ env.REGISTRY_FORGE }}
+          repository: ${{ env.REGISTRY_REPO }}
+          token: ${{ secrets.REGISTRY_TOKEN }}
+          path: package-registry
+          sparse-checkout: ${{ env.PATH_PREFIX }}/${{ needs.build.outputs.pkg-name }}/${{ needs.build.outputs.pkg-version }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ${{ needs.build.outputs.pkg-id }}
+
+      - name: Commit into the registry layout
+        env:
+          PKG_NAME: ${{ needs.build.outputs.pkg-name }}
+          PKG_VERSION: ${{ needs.build.outputs.pkg-version }}
+          PKG_ID: ${{ needs.build.outputs.pkg-id }}
+          GIT_USER_NAME: ${{ needs.build.outputs.git-user-name }}
+          GIT_USER_EMAIL: ${{ needs.build.outputs.git-user-email }}
+        run: |
+          unzip "${PKG_ID}/${PKG_ID}.zip" -d "$PKG_ID"
+          mkdir -p "package-registry/${PATH_PREFIX}/${PKG_NAME}"
+          mv "${PKG_ID}/${PKG_NAME}/${PKG_VERSION}" "package-registry/${PATH_PREFIX}/${PKG_NAME}/"
+          cd package-registry
+          git config user.name "$GIT_USER_NAME"
+          git config user.email "$GIT_USER_EMAIL"
+          git checkout -b "$PKG_ID"
+          git add .
+          git commit -m "${PKG_NAME}:${PKG_VERSION}"
+
+      - name: Push branch to the fork
+        env:
+          PKG_ID: ${{ needs.build.outputs.pkg-id }}
+        run: |
+          cd package-registry
+          git remote add fork "${REGISTRY_FORGE}/${REGISTRY_FORK}"
+          git push --force --set-upstream fork "$PKG_ID"
+          echo "Pushed branch '$PKG_ID' to $REGISTRY_FORK."
+          echo "Open a PR against $REGISTRY_REPO:main to publish."

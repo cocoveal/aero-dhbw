@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Assemble the publishable package bundle for a target namespace/dir.
+#
+#   scripts/package @local   -> install into the local Typst dir (for @local testing)
+#   scripts/package out      -> copy the bundle into ./out/<name>/<version> (used by CI)
+#
+# The `contents` allowlist below is the source of truth for what ships to
+# Universe; keep it in sync with `exclude` in typst.toml.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+. scripts/setup
+
+target="${1:?usage: scripts/package <@local|@preview|DIR>}"
+dest="$(resolve-target "$target")/$PKG_PREFIX/$VERSION"
+
+contents=(src template typst.toml README.md LICENSE thumbnail.png)
+
+rm -rf "$dest"
+mkdir -p "$dest"
+cp -r "${contents[@]}" "$dest/"
+echo "packaged $PKG_PREFIX:$VERSION -> $dest"
