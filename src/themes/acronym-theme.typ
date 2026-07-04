@@ -17,7 +17,7 @@
       inset: (x, y) => {
         if (x == 0) {
           (left: 0pt, rest: 5pt)
-        } else if (x == 3) {
+        } else if (x == 1) {
           (right: 0pt, rest: 5pt)
         } else {
           5pt

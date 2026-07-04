@@ -92,6 +92,10 @@ if type(caption) == content {
     authors.len() >= 1 and authors.len() <= 6,
     message: "aero-dhbw supports between 1 and 6 authors (got " + str(authors.len()) + ")",
   )
+  assert(
+    type(start-date) == datetime and type(end-date) == datetime,
+    message: "aero-dhbw requires `start-date` and `end-date` to be set with datetime(...)",
+  )
 
   // Localization
   let outline-title = ""
@@ -181,7 +185,6 @@ if type(caption) == content {
   // Text styling
   set text(
     size: text-size,
-    region: "de",
     lang: text-lang,
     font: font,
     hyphenate: true
@@ -304,35 +307,32 @@ if type(caption) == content {
     if outline-style == "typst" {
       outline(title: outline-title)
     }
-    // Make Chapters bold
-    else if outline-style == "default" {
+    // Any other value ("default"): make level-1 chapters bold.
+    else {
       show outline.entry.where(level: 1): it => link(
         it.element.location(),
         strong(it.indented(it.prefix(), it.body() + h(1fr) + it.page()))
       )
-      
-      outline(title: outline-title)
-    } else {
-      show outline.entry.where(level: 1): it => link(
-        it.element.location(),
-        strong(it.indented(it.prefix(), it.body() + h(1fr) + it.page()))
-      )
-      
+
       outline(title: outline-title)
     }
   }
 
   show outline: set heading(outlined: true)
 
-  // List of Figures & List of Tables
-  outline(
+  // List of Figures & List of Tables — only when the document has any.
+  context if query(figure.where(kind: image)).len() != 0 {
+    outline(
       title: fig-list-title,
       target: figure.where(kind: image)
-  )
-  outline(
-    title: table-list-title,
-    target: figure.where(kind: table)
-  )
+    )
+  }
+  context if query(figure.where(kind: table)).len() != 0 {
+    outline(
+      title: table-list-title,
+      target: figure.where(kind: table)
+    )
+  }
 
   // List of Acronyms
   if acronym-list.len() != 0 {

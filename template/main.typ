@@ -52,6 +52,10 @@
   // bib: bib,
 )
 
+// Optional: force a specific region for hyphenation / quote style
+// (the template only sets the language, e.g. "en" covers US, GB, AU, …).
+// #set text(region: "GB")
+
 // Keep the content in the chapters folder and only include the files here.
 // For example:
 #include "chapters/introduction.typ"
