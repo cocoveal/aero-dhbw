@@ -16,7 +16,7 @@
 // 
 // If you need other functions of the #figure function, you can add
 // them here as well. They will be piped to the backend figure function.
-#import "@preview/aero-dhbw:0.2.0": pa-figure
+#import "@preview/aero-dhbw:0.2.1": pa-figure
 
 = introduction
 
