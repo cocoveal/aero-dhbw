@@ -1,5 +1,5 @@
 // use these imports for all your files:
-#import "@preview/glossy:0.9.1"
+#import "@preview/glossy:0.9.2"
 
 // pa-figure lets you define two different titles for your figures.
 // The "long" name is for the page its displayed on and

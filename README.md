@@ -180,7 +180,7 @@ Some tips on how to use this template optimally.
 - Define some acronyms in `acronyms.typ` to use them for your paper
 - Import glossy in your chapter files to make use of the defined acronyms with the following:
 ```typ
-#import "@preview/glossy:0.9.1": *
+#import "@preview/glossy:0.9.2": *
 ```
 
 - Now, you can use your acronyms by treating them like labels. Use `@` to reference them in your text.
