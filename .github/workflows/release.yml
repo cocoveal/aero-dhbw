@@ -73,6 +73,10 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           artifacts: ${{ needs.build.outputs.pkg-id }}/*
+          # Update the existing release (refreshing its assets) instead of
+          # failing with 422 when a version's tag is force-moved for an
+          # in-place redo before it's published to Universe.
+          allowUpdates: true
 
   publish:
     name: Stage Universe PR (push branch to fork)
