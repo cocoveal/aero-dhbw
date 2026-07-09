@@ -22,34 +22,34 @@ if type(caption) == content {
   }
 }
 
-// Normalize the polymorphic `author` argument into a list of author dicts.
-// String -> single author using the top-level mat-number / course-acronym.
-// Array  -> multiple authors; each entry a (name, mat-number, course-acronym)
-//           dict (missing keys default to ""); a bare string entry is name-only.
-#let normalize-authors(author, mat-number, course-acronym) = {
-  if type(author) == array {
-    author.map(a => if type(a) == dictionary {
-      (
-        name: a.at("name", default: ""),
-        mat-number: a.at("mat-number", default: ""),
-        course-acronym: a.at("course-acronym", default: ""),
-      )
-    } else {
-      (name: a, mat-number: "", course-acronym: "")
-    })
-  } else {
-    ((name: author, mat-number: mat-number, course-acronym: course-acronym),)
+#let normalize-authors(author) = {
+  assert(
+    type(author) == array,
+    message: "`author` must be an array of dictionaries like ((name: \"Jane Doe\", mat-number: \"123456\", course-acronym: \"TINF22\"),)",
+  )
+
+  let authors = ()
+  for a in author {
+    assert(
+      type(a) == dictionary,
+      message: "each `author` entry must be a dictionary with name, mat-number, and course-acronym",
+    )
+    authors.push((
+      name: a.at("name", default: ""),
+      mat-number: a.at("mat-number", default: ""),
+      course-acronym: a.at("course-acronym", default: ""),
+    ))
   }
+
+  authors
 }
 
 #let aero-dhbw(
   title: [],
   project: [],
   project-type: [],
-  author: [],
+  author: (),
   course: [],
-  mat-number: [],
-  course-acronym: [],
   start-date: none,
   end-date: none,
   supervisor: [],
@@ -86,8 +86,7 @@ if type(caption) == content {
   import "@preview/glossy:0.9.2": * // package for acronyms
   import "themes/acronym-theme.typ": theme-pa // theme for glossy
 
-  // Normalize the polymorphic author argument into a list of author dicts.
-  let authors = normalize-authors(author, mat-number, course-acronym)
+  let authors = normalize-authors(author)
   assert(
     authors.len() >= 1 and authors.len() <= 6,
     message: "aero-dhbw supports between 1 and 6 authors (got " + str(authors.len()) + ")",

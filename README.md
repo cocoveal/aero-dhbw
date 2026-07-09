@@ -37,7 +37,9 @@ In case you want to do the template setup yourself, here is the minimal configur
 #import "@preview/aero-dhbw:0.2.1": aero-dhbw
 
 #show: aero-dhbw.with(
-  author: "",
+  author: (
+    (name: "", mat-number: "", course-acronym: ""),
+  ),
   start-date: datetime(year: 2026, month: 1, day: 1),
   end-date: datetime(year: 2026, month: 12, day: 31),
 )
@@ -53,16 +55,14 @@ I would recommend filling in more options, otherwise your cover page won't look 
 | title | ✗* | — | Specifies the title of the project. |
 | project | ✗* | — | Specifies the official DHBW project identifier (e.g. T1000). |
 | project-type | ✗* | — | Defines the type of project (e.g. seminar thesis or bachelor thesis). |
-| author | ✓ | — | Author's full name (string) for a single author, or an array of `(name, mat-number, course-acronym)` dicts for multiple authors. [See example](#multiple-authors) |
+| author | ✓ | — | Array of author dictionaries with `name`, `mat-number`, and `course-acronym` entries. Use one entry for a single-author thesis. [See example](#authors) |
 | course | ✗* | — | Defines the name of the study course. |
-| mat-number | ✗* | — | Specifies the DHBW matriculation number (6-digit student ID). |
-| course-acronym | ✗* | — | Defines the abbreviated course name (3–4 letters followed by 2 numbers). |
 | start-date | ✓ | — | Specifies the official start date of the project. |
 | end-date | ✓ | — | Specifies the official end date of the project. |
 | supervisor | ✗ | — | Specifies the company supervisor for the project. |
 | university-supervisor | ✗ | — | Specifies the university professor supervising the project (mainly relevant for bachelor theses). |
-| company | ✗* | — | Defines the name of the employer or partner company. |
-| company-location | ✗* | — | Specifies the city where the company is located. |
+| company | ✗ | — | Defines the name of the employer or partner company, if applicable. |
+| company-location | ✗ | — | Specifies the city where the company is located, if applicable. |
 | university | ✗* | — | Defines the name of the university. |
 | **Logos & Other Documents** |  |  |  |
 | university-logo | ✗ | — | Path to the image file of the university logo. |
@@ -152,9 +152,9 @@ It is recommended to use the shared `glossary-list` provided in `acronyms.typ` i
 
 ---
 
-### Multiple authors
+### Authors
 
-For a joint thesis, pass an array of author dictionaries to `author` (up to 6 authors). Each author carries their own `name`, `mat-number`, and `course-acronym`; the top-level `mat-number` / `course-acronym` are ignored in this case.
+Pass an array of author dictionaries to `author` (up to 6 authors). For a single-author thesis, use the same shape with one entry.
 
 #### Example
 
@@ -168,7 +168,7 @@ For a joint thesis, pass an array of author dictionaries to `author` (up to 6 au
 )
 ```
 
-The title page lists each author (with their own Student ID / Course row) and the Declaration of Authorship switches to plural wording with a signature for each author (laid out in a grid for two or more).
+The title page lists each author with their own Student ID / Course row. For two or more authors, the Declaration of Authorship switches to plural wording and renders one signature per author.
 
 
 ## Tips

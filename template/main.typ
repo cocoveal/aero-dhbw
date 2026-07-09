@@ -2,17 +2,12 @@
 #import "@preview/aero-dhbw:0.2.1": aero-dhbw
 
 #let title = ""
-#let author = ""
-// For a joint thesis, set author to an array of dicts instead of a string:
-// #let author = (
-//   (name: "", mat-number: "", course-acronym: ""),
-//   (name: "", mat-number: "", course-acronym: ""),
-// )
+#let author = (
+  (name: "", mat-number: "", course-acronym: ""),
+)
 #let project = ""
 #let project-type = ""
 #let course = ""
-#let mat-number = ""
-#let course-acronym = ""
 #let university = ""
 #let place-of-authorship = ""
 #let supervisor = ""
@@ -31,8 +26,6 @@
   project: project,
   project-type: project-type,
   course: course,
-  mat-number: mat-number,
-  course-acronym: course-acronym,
   place-of-authorship: place-of-authorship,
   author: author,
   start-date: datetime(year: 2025, month: 1, day: 1),
