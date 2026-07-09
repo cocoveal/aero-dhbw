@@ -18,7 +18,8 @@ The package is bilingual (German default, English) and supports single and multi
 
 ## Dependencies
 
-- `@preview/glossy:0.9.0` — acronyms/glossary (acronyms are referenced like labels: `@usa`; use `@usa:both` in headings to avoid the long-form leaking into the outline).
+- `@preview/glossy:0.9.2` — acronyms/glossary (acronyms are referenced like labels: `@usa`; use `@usa:both` in headings to avoid the long-form leaking into the outline).
+- `@preview/codly:1.3.0` — code block styling in the starter template only; the package source does not import it.
 - Default font is **Libertinus Serif**; default bib/citation style is IEEE.
 
 ## Build & test

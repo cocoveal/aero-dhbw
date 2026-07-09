@@ -200,6 +200,16 @@ By adding `:both`, it will display the long form + short form, but will not coun
 Check out [glossy](https://typst.app/universe/package/glossy) for more infos on how to use it.
 
 
+### Use code blocks
+
+The default template styles code blocks with [codly](https://typst.app/universe/package/codly). You can use normal fenced code blocks in your chapters:
+
+````typ
+```typ
+#let example = "hello"
+```
+````
+
 ### Define custom captions for outlines of figures/tables
 - Decide what comes into the outlines for your figures by using the `pa-figure` command. But first, you need to import it into your chapters:
 ```typ
