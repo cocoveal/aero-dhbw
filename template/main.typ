@@ -1,5 +1,9 @@
 #import "acronyms.typ": *
 #import "@preview/aero-dhbw:0.2.1": aero-dhbw
+#import "@preview/codly:1.3.0": *
+
+#show: codly-init.with()
+#codly()
 
 #let title = ""
 #let author = (

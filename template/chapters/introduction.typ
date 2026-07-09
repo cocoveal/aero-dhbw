@@ -27,3 +27,9 @@
     long: [This is under the table!]
   )
 )
+
+// Code blocks are styled by codly from main.typ:
+//
+// ```typ
+// #let example = "hello"
+// ```
