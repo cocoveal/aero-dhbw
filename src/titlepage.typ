@@ -20,6 +20,16 @@
     set image(height: 2cm, fit: "contain")
     source
   }
+  let has-value(value) = value != none and value != [] and value != ""
+  let pair(left, right) = {
+    if has-value(left) and has-value(right) {
+      [#left, #right]
+    } else if has-value(left) {
+      left
+    } else {
+      right
+    }
+  }
 
   set text(size: 14pt)
 
@@ -95,23 +105,34 @@
 
   set rect(width: 100%, inset: 0.5em)
 
-  let parsed = ()
-
-  if supervisor != [] {
-    parsed.push(supervisor-label)
-    parsed.push(supervisor)
-  }
-
-  if university-supervisor != [] {
-    parsed.push(university-supervisor-label)
-    parsed.push(university-supervisor)
-  }
+  let rows = (
+    period-label,
+    [#start-date - #end-date],
+  )
 
   // One "Student ID, Course" row per author: label on the first row only.
-  let id-rows = ()
-  for (i, a) in authors.enumerate() {
-    id-rows.push(if i == 0 { id-course-label } else { [] })
-    id-rows.push([#a.mat-number, #a.course-acronym])
+  let id-label = id-course-label
+  for a in authors {
+    if has-value(a.mat-number) or has-value(a.course-acronym) {
+      rows.push(id-label)
+      rows.push(pair(a.mat-number, a.course-acronym))
+      id-label = []
+    }
+  }
+
+  if has-value(company) or has-value(company-location) {
+    rows.push(partner-label)
+    rows.push([#par(justify: true)[#pair(company, company-location)]])
+  }
+
+  if has-value(supervisor) {
+    rows.push(supervisor-label)
+    rows.push(supervisor)
+  }
+
+  if has-value(university-supervisor) {
+    rows.push(university-supervisor-label)
+    rows.push(university-supervisor)
   }
 
   align(left,
@@ -119,12 +140,7 @@
       columns: (1fr, 1fr),
       align: left,
       inset: 0.5em,
-      period-label,
-      [#start-date - #end-date],
-      ..id-rows,
-      partner-label,
-      [#par(justify: true)[#company, #company-location]],
-      ..parsed
+      ..rows
     )
   )
 }
