@@ -70,8 +70,8 @@ I would recommend filling in more options, otherwise your cover page won't look 
 | confidentiality-notice | ✗ | — | Path to an image or PDF containing the confidentiality notice (mainly for company theses). |
 | place-of-authorship | ✗* | — | Specifies the city where the project was completed (used in the declaration of authorship). |
 | **Content Files** |  |  |  |
-| path-to-abstract | ✗ | — | Path to the Typst file containing the abstract. |
-| path-to-annex | ✗ | — | Path to the Typst file containing the annex. |
+| path-to-abstract | ✗ | — | Abstract content, e.g. `include "chapters/abstract.typ"`. |
+| path-to-annex | ✗ | — | Annex content, e.g. `include "chapters/annex.typ"`. |
 | **Acronyms & AI Usage** |  |  |  |
 | acronym-list | ✗ | — | Dictionary defining acronyms used in the document. [See example](#acronym-list)|
 | used-ai | ✗ | — | Dictionary mapping AI model names to descriptions of their usage (required by DHBW guidelines). [See example](#used-ai)|
