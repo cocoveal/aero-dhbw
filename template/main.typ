@@ -45,7 +45,7 @@
   text-lang: "en",
   // company-logo: company_logo,
   // confidentiality-notice: confidentiality-notice,
-  // path-to-abstract: "chapters/abstract.typ",
+  // abstract: include "chapters/abstract.typ",
   // bib: bib,
 )
 

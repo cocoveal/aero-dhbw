@@ -61,7 +61,7 @@ if type(caption) == content {
   company-logo: [],
   confidentiality-notice: [],
   place-of-authorship: [],
-  path-to-abstract: [],
+  abstract: none,
   acronym-list: (),
   bib: [],
   bib-style: "ieee",
@@ -77,7 +77,7 @@ if type(caption) == content {
   figure-gap-under: 1em,
   table-caption-position: bottom,
   heading-name-as-supplement: false,
-  path-to-annex: none,
+  annex: none,
   used-ai: none,
   body
 ) = {
@@ -290,8 +290,8 @@ if type(caption) == content {
   {
     set heading(outlined: false)
     set par(justify: true, spacing: par-spacing)
-    if path-to-abstract != [] {
-      include path-to-abstract
+    if abstract != none {
+      abstract
     }
   }
   pagebreak(weak: true)
@@ -420,7 +420,7 @@ if type(caption) == content {
   }
 
   // Annex
-  if path-to-annex != none {
-    include path-to-annex
+  if annex != none {
+    annex
   }
 }
