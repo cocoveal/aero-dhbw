@@ -167,14 +167,12 @@ if type(caption) == content {
       stroke: (bottom: 1pt),
       inset: (bottom: 0.75em),
       context {
-        if query(selector(heading).after(here())).len() == 0 {
-          query(selector(heading.where(level: 1)).before(here())).last().body
-        }
-        else if query(selector(heading).after(here())).first().level == 1 and query(selector(heading).after(here())).first().location().page() == here().page() {
-          query(selector(heading.where(level: 1)).after(here())).first().body
-        } 
-        else {
-          query(selector(heading.where(level: 1)).before(here())).last().body
+        let previous = query(selector(heading.where(level: 1)).before(here()))
+        let following = query(selector(heading).after(here()))
+        if following.len() > 0 and following.first().level == 1 and following.first().location().page() == here().page() {
+          following.first().body
+        } else if previous.len() > 0 {
+          previous.last().body
         }
         h(1fr)
         numbering(here().page-numbering(), counter(page).get().at(0))
