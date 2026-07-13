@@ -17,10 +17,74 @@ env:
   REGISTRY_REPO: typst/packages
   REGISTRY_FORK: cocoveal/packages   # <-- your fork of typst/packages
   PATH_PREFIX: packages/preview
+  # Docker image used by typst/package-check v0.6.0, pinned to the current digest.
+  PACKAGE_CHECK_IMAGE: ghcr.io/typst/package-check@sha256:97993f6cafed2d74442299b3f76f756fdaaadea284b178df47481d62adb8d8ef
 
 jobs:
+  universe-lint:
+    name: Universe lint (package-check)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      # package-check resolves imports from this checkout with network access
+      # disabled, just like the lint job in typst/packages.
+      - name: Checkout the package registry
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ env.REGISTRY_REPO }}
+          path: package-registry
+
+      - name: Stage package in the registry
+        run: |
+          . scripts/setup
+          target="package-registry/$PATH_PREFIX/$PKG_PREFIX/$VERSION"
+          if [[ -e "$target" ]]; then
+            echo "@preview/$PKG_PREFIX:$VERSION already exists in the registry" >&2
+            exit 1
+          fi
+          scripts/package "package-registry/$PATH_PREFIX"
+
+      - name: Run the official package checker
+        run: |
+          . scripts/setup
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE/package-registry:/data" \
+            -w /data/packages \
+            "$PACKAGE_CHECK_IMAGE" \
+            check "@preview/$PKG_PREFIX:$VERSION"
+
+  universe-test:
+    name: Universe test (bundler)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Checkout the official bundler
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ env.REGISTRY_REPO }}
+          path: package-registry
+          sparse-checkout: bundler
+
+      - name: Stage package in the registry
+        run: scripts/package package-registry/${PATH_PREFIX}
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@4be9e76fd7c4901c61fb841f559994984270fce7
+        with:
+          toolchain: stable
+
+      - name: Build the official bundler
+        run: cargo build --release --manifest-path package-registry/bundler/Cargo.toml
+
+      - name: Validate the package bundle
+        working-directory: package-registry
+        run: bundler/target/release/bundler
+
   build:
     name: Build bundle
+    needs: [universe-lint, universe-test]
     runs-on: ubuntu-latest
     outputs:
       pkg-name: ${{ steps.meta.outputs.pkg-name }}
