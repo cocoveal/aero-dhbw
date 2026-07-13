@@ -24,6 +24,8 @@
 #let dhbw_logo = image("resources/dhbw-logo.png")
 // #let company_logo = image("")
 // #let confidentiality-notice = image("", width: 100%)
+// Leave unset to use the generated declaration of authorship.
+// #let declaration_of_authorship = image("", width: 100%)
 
 #show: aero-dhbw.with(
   title: title,
@@ -45,6 +47,7 @@
   text-lang: "en",
   // company-logo: company_logo,
   // confidentiality-notice: confidentiality-notice,
+  // declaration-of-authorship: declaration_of_authorship,
   // path-to-abstract: include "chapters/abstract.typ",
   // bib: bib,
 )

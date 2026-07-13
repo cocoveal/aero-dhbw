@@ -60,6 +60,7 @@ if type(caption) == content {
   university-logo: [],
   company-logo: [],
   confidentiality-notice: [],
+  declaration-of-authorship: none,
   place-of-authorship: [],
   path-to-abstract: none,
   acronym-list: (),
@@ -274,15 +275,20 @@ if type(caption) == content {
 
   // Declaration of Authorship
   import "declaration.typ": *
-  declaration(
-    title: title,
-    authors: authors,
-    project: project,
-    project-type: project-type,
-    date: end-date,
-    place-of-authorship: place-of-authorship,
-    lang: text-lang
-  )
+  if declaration-of-authorship != none {
+    set page(margin: 0cm, header: none, numbering: none)
+    declaration-of-authorship
+  } else {
+    declaration(
+      title: title,
+      authors: authors,
+      project: project,
+      project-type: project-type,
+      date: end-date,
+      place-of-authorship: place-of-authorship,
+      lang: text-lang
+    )
+  }
   
   pagebreak(weak: true)
 
