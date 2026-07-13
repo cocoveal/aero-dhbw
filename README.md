@@ -68,6 +68,7 @@ I would recommend filling in more options, otherwise your cover page won't look 
 | university-logo | ✗ | — | Path to the image file of the university logo. |
 | company-logo | ✗ | — | Path to the image file of the company logo. |
 | confidentiality-notice | ✗ | — | Path to an image or PDF containing the confidentiality notice (mainly for company theses). |
+| declaration-of-authorship | ✗ | Generated declaration | Custom full-page declaration content, e.g. `image("resources/declaration.pdf", width: 100%)`. |
 | place-of-authorship | ✗* | — | Specifies the city where the project was completed (used in the declaration of authorship). |
 | **Content Files** |  |  |  |
 | path-to-abstract | ✗ | — | Abstract content, e.g. `include "chapters/abstract.typ"`. |

@@ -20,4 +20,7 @@ done
 "${SED_INPLACE[@]}" 's#// path-to-abstract: include "chapters/abstract.typ"#path-to-abstract: include "chapters/introduction.typ"#' "$tmp/main.typ"
 
 typst compile --root "$tmp" "$tmp/main.typ" "$tmp/smoke.pdf"
-echo "template compiles against @local/$PKG_PREFIX:$VERSION ✔"
+"${SED_INPLACE[@]}" 's#// declaration-of-authorship: declaration_of_authorship#declaration-of-authorship: [Custom declaration]#' "$tmp/main.typ"
+"${SED_INPLACE[@]}" 's#path-to-abstract: include "chapters/introduction.typ"#path-to-abstract: [Abstract without a heading]#' "$tmp/main.typ"
+typst compile --root "$tmp" "$tmp/main.typ" "$tmp/custom-declaration.pdf"
+echo "template and custom declaration compile against @local/$PKG_PREFIX:$VERSION ✔"

@@ -12,7 +12,7 @@ The package is bilingual (German default, English) and supports single and multi
 
 - `src/aero-dhbw.typ` — the package entrypoint (`entrypoint` in `typst.toml`). Exports `aero-dhbw` (the document show-function users apply via `#show: aero-dhbw.with(...)`) and `pa-figure`. This single file orchestrates the **entire document flow and all global styling**.
 - `src/titlepage.typ` — `titlepage()` cover-page function.
-- `src/declaration.typ` — `declaration()` Declaration of Authorship / Erklärung (legally-worded, references specific DHBW regulations — do not casually reword the legal sentences).
+- `src/declaration.typ` — generated fallback for the Declaration of Authorship / Erklärung (legally-worded, references specific DHBW regulations — do not casually reword the legal sentences).
 - `src/themes/acronym-theme.typ` — `theme-pa`, the rendering theme passed to the `glossy` glossary package.
 - `template/` — the starter project scaffold (`[template]` in `typst.toml`, entrypoint `main.typ`). `main.typ` declares config vars and applies the show-function; chapter content lives in `template/chapters/`, acronyms in `template/acronyms.typ`. This is what users get, so keep it minimal and well-commented rather than feature-complete.
 
@@ -59,7 +59,7 @@ On `git push --follow-tags`, `release.yml` builds the bundle, makes a GitHub rel
 - **Authors:** `author` is always an array of `(name, mat-number, course-acronym)` dicts, even for a single author (`aero-dhbw()` asserts `1..6`). `normalize-authors` validates that shape and fills missing keys with `""`; `titlepage`/`declaration` consume the normalized list for per-author ID rows + stacked names under "by"/"von"; plural declaration with a signature per author (single = stacked block, 2+ = two-column grid). The title page uses **flexible `v(1fr)` glue** so the cover fits one page regardless of author count.
 - **Title-page metadata grid:** rows are dynamic. Empty `mat-number`/`course-acronym`, `company`/`company-location`, `supervisor`, and `university-supervisor` values do not render blank grid rows; this keeps university-only papers from showing company placeholders.
 - **Dual captions:** `pa-figure` + `flex-caption` + the `_in-outline` state implement short-vs-long captions (short shows in the List of Figures/Tables, long shows under the figure). Captions may be `content` (used in both places) or a `(long:, short:)` dictionary.
-- **Document flow is fixed and ordered** inside `aero-dhbw()`: titlepage → (optional) confidentiality notice → declaration → (optional) abstract → ToC → list of figures → list of tables → glossary → body → bibliography → (optional) AI-usage table → (optional) annex. Page numbering resets and `set page(...)`/heading `show` rules are reconfigured at specific points in this sequence — moving a block can break numbering or heading styling.
+- **Document flow is fixed and ordered** inside `aero-dhbw()`: titlepage → (optional) confidentiality notice → generated or custom declaration → (optional) abstract → ToC → list of figures → list of tables → glossary → body → bibliography → (optional) AI-usage table → (optional) annex. Page numbering resets and `set page(...)`/heading `show` rules are reconfigured at specific points in this sequence — moving a block can break numbering or heading styling.
 - Annex numbering switches headings to `A.1` and resets the heading counter; figure numbering is `<chapter>.<n>` in the body and `A.<n>` in the annex.
 
 ## Config surface
