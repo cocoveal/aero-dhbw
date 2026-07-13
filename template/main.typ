@@ -45,7 +45,9 @@
   text-lang: "en",
   // company-logo: company_logo,
   // confidentiality-notice: confidentiality-notice,
+  // Pass included content for project files, not a quoted path.
   // path-to-abstract: include "chapters/abstract.typ",
+  // path-to-annex: include "chapters/annex.typ",
   // bib: bib,
 )
 
