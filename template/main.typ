@@ -1,5 +1,5 @@
 #import "acronyms.typ": *
-#import "@preview/aero-dhbw:0.3.0": aero-dhbw
+#import "@preview/aero-dhbw:0.4.0": aero-dhbw
 #import "@preview/codly:1.3.0": *
 
 #show: codly-init.with()
