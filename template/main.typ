@@ -15,9 +15,10 @@
 #let university = ""
 #let place-of-authorship = ""
 #let supervisor = ""
+#let university-supervisor = ""
 #let company = ""
 #let company-location = ""
-#let bib = ""
+// #let bib = bibliography("references.bib")
 
 // Uncomment the ones you need and enter the paths to the images/PDFs inside the quotes, e.g. image("path/to/image")
 // Uncomment them down below as well
@@ -37,6 +38,7 @@
   start-date: datetime(year: 2025, month: 1, day: 1),
   end-date: datetime(year: 2026, month: 1, day: 1),
   supervisor: supervisor,
+  university-supervisor: university-supervisor,
   company: company,
   company-location: company-location,
   university: university,

@@ -44,7 +44,13 @@
   let partner-label = []
 
   if text-lang == "en" {
-    degree-line = [of Degree Course #course \ at #university]
+    if has-value(course) and has-value(university) {
+      degree-line = [of Degree Course #course \ at #university]
+    } else if has-value(course) {
+      degree-line = [of Degree Course #course]
+    } else if has-value(university) {
+      degree-line = [at #university]
+    }
     by-word = "by"
     supervisor-label = [Company Supervisor]
     university-supervisor-label = [University Supervisor]
@@ -52,7 +58,13 @@
     id-course-label = [Student ID, Course]
     partner-label = [Cooperation Partner]
   } else {
-    degree-line = [Des Studienganges #course \ an der #university]
+    if has-value(course) and has-value(university) {
+      degree-line = [Des Studienganges #course \ an der #university]
+    } else if has-value(course) {
+      degree-line = [Des Studienganges #course]
+    } else if has-value(university) {
+      degree-line = [an der #university]
+    }
     by-word = "von"
     supervisor-label = [Betreuer der Ausbildungsfirma]
     university-supervisor-label = [Gutachter der DHBW]
@@ -85,20 +97,31 @@
 
   v(1fr)
 
-  text(size: 16pt)[#project-type (#project)]
+  let project-line = if has-value(project-type) and has-value(project) {
+    [#project-type (#project)]
+  } else {
+    pair(project-type, project)
+  }
+  if has-value(project-line) {
+    text(size: 16pt, project-line)
+    v(2em)
+  }
 
-  v(2em)
-
-  degree-line
+  if has-value(degree-line) {
+    degree-line
+  }
 
   v(1fr)
 
-  by-word
+  let author-names = authors.map(a => a.name).filter(has-value)
+  if author-names.len() > 0 {
+    by-word
 
-  // Original (full-leading) gap after "by"/"von", then names at half leading.
-  par(leading: 0.75em)[#authors.map(a => a.name).join(linebreak())]
+    // Original (full-leading) gap after "by"/"von", then names at half leading.
+    par(leading: 0.75em)[#author-names.join(linebreak())]
 
-  v(2em)
+    v(2em)
+  }
   end-date
 
   v(1fr)
