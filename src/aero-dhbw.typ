@@ -4,22 +4,31 @@
 
 
 // Feature-extended figures
-#let pa-figure(source, caption: none, ..args) = {
-if type(caption) == content {
-    figure(
-      source,
-      caption: caption,
-      ..args
+#let pa-figure(source, caption: none, outlined: auto, ..args) = {
+  assert(
+    caption == none or type(caption) == content or type(caption) == dictionary,
+    message: "`caption` must be content, a dictionary, or none",
+  )
+
+  let resolved-caption = if type(caption) == dictionary {
+    assert(
+      "long" in caption,
+      message: "dictionary captions require a `long` entry",
     )
-  } else if type(caption) == dictionary {
-    figure(
-      source,
-      caption: flex-caption(long: caption.long, short: caption.short),
-      ..args
+    flex-caption(
+      long: caption.long,
+      short: caption.at("short", default: none),
     )
   } else {
-    panic("Something is wrong with your caption type.")
+    caption
   }
+
+  figure(
+    source,
+    caption: resolved-caption,
+    outlined: if outlined == auto { caption != none } else { outlined },
+    ..args,
+  )
 }
 
 #let normalize-authors(author) = {
@@ -202,16 +211,14 @@ if type(caption) == content {
   // Heading styling
   show heading.where(level: 2): element => {
     set text(size: text-size + (1/2 * text-size))
-    v(2em)
+    set block(inset: (top: 2em, bottom: 2em))
     element
-    v(2em)
   }
 
   show heading.where(level: 3): element => {
     set text(size: text-size + (1/3 * text-size))
-    v(1em)
+    set block(inset: (top: 1em, bottom: 1em))
     element
-    v(1em)
   }
 
   // Math styling
@@ -363,9 +370,9 @@ if type(caption) == content {
   )
 
   show figure: it => {
-    v(figure-gap-above)
+    v(figure-gap-above, weak: true)
     it
-    v(figure-gap-under)
+    v(figure-gap-under, weak: true)
   }
 
   // Change heading numbering for content

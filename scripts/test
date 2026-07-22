@@ -17,10 +17,11 @@ cp -r template/. "$tmp/"
 grep -rlE '@preview/aero-dhbw:' "$tmp" | while read -r f; do
   "${SED_INPLACE[@]}" -E "s#@preview/aero-dhbw:[0-9.]+#@local/aero-dhbw:$VERSION#g" "$f"
 done
+printf '\n#pa-figure(rect(width: 1cm, height: 1cm))\n#pa-figure(rect(width: 1cm, height: 1cm), caption: (long: [Long caption]))\n' >> "$tmp/chapters/introduction.typ"
 "${SED_INPLACE[@]}" 's#// path-to-abstract: include "chapters/abstract.typ"#path-to-abstract: include "chapters/introduction.typ"#' "$tmp/main.typ"
 
 typst compile --root "$tmp" "$tmp/main.typ" "$tmp/smoke.pdf"
 "${SED_INPLACE[@]}" 's#// declaration-of-authorship: declaration_of_authorship#declaration-of-authorship: [Custom declaration]#' "$tmp/main.typ"
 "${SED_INPLACE[@]}" 's#path-to-abstract: include "chapters/introduction.typ"#path-to-abstract: [Abstract without a heading]#' "$tmp/main.typ"
 typst compile --root "$tmp" "$tmp/main.typ" "$tmp/custom-declaration.pdf"
-echo "template and custom declaration compile against @local/$PKG_PREFIX:$VERSION ✔"
+echo "template, pa-figure fallbacks, and custom declaration compile against @local/$PKG_PREFIX:$VERSION ✔"

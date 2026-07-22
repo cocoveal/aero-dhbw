@@ -77,7 +77,7 @@ I would recommend filling in more options, otherwise your cover page won't look 
 | acronym-list | ✗ | — | Dictionary defining acronyms used in the document. [See example](#acronym-list)|
 | used-ai | ✗ | — | Dictionary mapping AI model names to descriptions of their usage (required by DHBW guidelines). [See example](#used-ai)|
 | **Bibliography & Citations** |  |  |  |
-| bib | ✗ | — | Path to the bibliography file. |
+| bib | ✗ | — | Bibliography content evaluated in the calling document, e.g. `bibliography("references.bib")`. |
 | bib-style | ✗ | IEEE | Defines the bibliography style. |
 | citation-style | ✗ | IEEE | Defines the citation style. |
 | **Language & Typography** |  |  |  |
@@ -100,6 +100,20 @@ I would recommend filling in more options, otherwise your cover page won't look 
 ## Examples
 
 Below are some examples for configuration options that require some additional information.
+
+### `bib`
+
+Create the bibliography in the calling document so relative paths resolve from
+your project, then pass the resulting content to the template.
+
+```typ
+#let bib = bibliography("references.bib")
+
+#show: aero-dhbw.with(
+  // other arguments...
+  bib: bib,
+)
+```
 
 ### `heading-name-as-supplement`
 
@@ -239,3 +253,7 @@ The default template styles code blocks with [codly](https://typst.app/universe/
     caption: [This caption will show up both in-text and in the outline.]
 )
 ```
+
+The complete `caption` argument is optional. In dictionary form, `long` is
+required and `short` is optional. Captionless figures are omitted from the
+figure or table outline unless `outlined: true` is set explicitly.
