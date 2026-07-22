@@ -331,13 +331,13 @@
   show outline: set heading(outlined: true)
 
   // List of Figures & List of Tables — only when the document has any.
-  context if query(figure.where(kind: image)).len() != 0 {
+  context if query(figure.where(kind: image, outlined: true)).len() != 0 {
     outline(
       title: fig-list-title,
       target: figure.where(kind: image)
     )
   }
-  context if query(figure.where(kind: table)).len() != 0 {
+  context if query(figure.where(kind: table, outlined: true)).len() != 0 {
     outline(
       title: table-list-title,
       target: figure.where(kind: table)
