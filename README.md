@@ -21,7 +21,7 @@ Importing and using the template is pretty straight-forward, especially with pre
 The fastest way of just using the template is by initializing a new project with the default template configuration.
 You can do so by typing the following command in a terminal (don't forget to navigate to the folder you want to be in first):
 ```typ
-typst init "@preview/aero-dhbw:0.4.0" PROJECT-NAME
+typst init "@preview/aero-dhbw:0.4.1" PROJECT-NAME
 ```
 Replace `PROJECT-NAME` with the actual project name or something else if you structure your folders differently.
 
@@ -34,7 +34,7 @@ The intended directory structure is also already present and some usage hints fo
 In case you want to do the template setup yourself, here is the minimal configuration needed for the template:
 
 ```typ
-#import "@preview/aero-dhbw:0.4.0": aero-dhbw
+#import "@preview/aero-dhbw:0.4.1": aero-dhbw
 
 #show: aero-dhbw.with(
   author: (
@@ -144,7 +144,7 @@ This information is rendered as a table in the annex and is required by DHBW gui
 #### Example
 
 ```typ
-#import "@preview/aero-dhbw:0.4.0": aero-dhbw
+#import "@preview/aero-dhbw:0.4.1": aero-dhbw
 
 #let ai-dict = (
     "NAME-OF-MODEL": [DESCRIPTION OF USE]
@@ -228,7 +228,7 @@ The default template styles code blocks with [codly](https://typst.app/universe/
 ### Define custom captions for outlines of figures/tables
 - Decide what comes into the outlines for your figures by using the `pa-figure` command. But first, you need to import it into your chapters:
 ```typ
-#import "@preview/aero-dhbw:0.4.0": pa-figure
+#import "@preview/aero-dhbw:0.4.1": pa-figure
 ```
 
 - Afterwards, use `pa-figure` to differentiate between a long and a short caption:

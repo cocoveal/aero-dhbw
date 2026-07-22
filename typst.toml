@@ -1,6 +1,6 @@
 [package]
 name = "aero-dhbw"
-version = "0.4.0"
+version = "0.4.1"
 entrypoint = "src/aero-dhbw.typ"
 authors = ["cocoveal <https://github.com/cocoveal>"]
 license = "MIT"
