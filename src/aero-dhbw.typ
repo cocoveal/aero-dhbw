@@ -22,11 +22,16 @@
   } else {
     caption
   }
+  let has-caption = if type(caption) == dictionary {
+    caption.long != none and caption.long != []
+  } else {
+    caption != none and caption != []
+  }
 
   figure(
     source,
     caption: resolved-caption,
-    outlined: if outlined == auto { caption != none } else { outlined },
+    outlined: if outlined == auto { has-caption } else { outlined },
     ..args,
   )
 }
